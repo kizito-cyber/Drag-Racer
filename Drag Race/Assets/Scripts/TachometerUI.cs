@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class TachometerUI : MonoBehaviour
 {
     [Header("UI refs")]
@@ -8,8 +8,8 @@ public class TachometerUI : MonoBehaviour
     public RectTransform silverZoneRect;
     public RectTransform goldZoneRect;
     public RectTransform redZoneRect;
-    public Text gearText;
-    public Text rpmText;
+    public TextMeshProUGUI gearText;
+    public TextMeshProUGUI rpmText;
 
     [Header("Configuration")]
     public float maxRPM = 7000f;
