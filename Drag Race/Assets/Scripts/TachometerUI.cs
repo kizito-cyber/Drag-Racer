@@ -4,7 +4,7 @@ using TMPro;
 public class TachometerUI : MonoBehaviour
 {
     [Header("UI refs")]
-    public Image tachFill; // fill image, type = Filled, FillMethod = Horizontal
+    public Image tachFill; 
     public RectTransform silverZoneRect;
     public RectTransform goldZoneRect;
     public RectTransform redZoneRect;
@@ -53,7 +53,7 @@ public class TachometerUI : MonoBehaviour
     {
         if (tachFill != null) tachFill.fillAmount = Mathf.Clamp01(rpm / maxR);
         if (rpmText != null) rpmText.text = Mathf.RoundToInt(rpm).ToString() + " RPM";
-        if (gearText != null) gearText.text = "G" + gear;
+        if (gearText != null) gearText.text = "Gear " + gear;
     }
 
     // Called on shift for temporary flash or UI animation

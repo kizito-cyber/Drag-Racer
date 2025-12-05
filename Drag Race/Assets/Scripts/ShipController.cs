@@ -29,13 +29,13 @@ public class ShipController : MonoBehaviour
     public float redZoneStartRPM = 6000f;
 
     [Header("RPM dynamics")]
-    public float rpmRiseSpeed = 2200f; // how fast rpm approaches target while gas held
-    public float rpmFallSpeed = 1500f; // how fast rpm falls when gas released
+    public float rpmRiseSpeed = 2200f;
+    public float rpmFallSpeed = 1500f; 
     [HideInInspector] public float engineRPM = 0f;
 
     [Header("Drive")]
-    public float throttle = 0f; // 0..1
-    public float speedDrag = 0.1f; // extra drag proportional to velocity
+    public float throttle = 0f; 
+    public float speedDrag = 0.1f;
     public float baseForceMultiplier = 1f; // global scale
 
     [Header("Shift multipliers")]
@@ -77,12 +77,10 @@ public class ShipController : MonoBehaviour
         }
         engineRPM = idleRPM;
     }
-
-    // helper to give a curve with a peak in 3500-4500 area (normalized later)
+ 
     private static AnimationCurve CreateDefaultCurve(float peakRpm, float beyondRpm, float height)
     {
-        // This helper is called at edit-time for defaults; values are approximate placeholders
-        // We use curve points at 0, mid, 1 normalized; user will fine-tune in inspector
+        
         return new AnimationCurve(
             new Keyframe(0f, 0.2f),
             new Keyframe(0.5f, height),
@@ -108,13 +106,12 @@ public class ShipController : MonoBehaviour
 
     void FixedUpdate()
     {
-        // update engineRPM based on throttle and simple model
-        float gearMaxRPM = maxRPM; // using same max for simplicity
+      
+        float gearMaxRPM = maxRPM; 
         float targetRPM = Mathf.Lerp(idleRPM, gearMaxRPM, throttle);
 
-        // better: targetRPM influenced by speed and gear ratio to reflect gearing
         float speedFactor = rb.linearVelocity.magnitude * (1f / Mathf.Max(0.0001f, gears[currentGearIndex].ratio));
-        // map speedFactor to a 0..1 for RPM influence (tweak constant if you want)
+       
         float speedContribution = Mathf.Clamp01(speedFactor * 0.05f);
         targetRPM = Mathf.Lerp(idleRPM, gearMaxRPM, Mathf.Max(throttle, speedContribution));
 
@@ -126,7 +123,7 @@ public class ShipController : MonoBehaviour
         // compute torque from current gear curve
         Gear g = gears[currentGearIndex];
         float rpmNormalized = Mathf.Clamp01(engineRPM / maxRPM);
-        float curveValue = g.torqueCurve.Evaluate(rpmNormalized); // 0..some value
+        float curveValue = g.torqueCurve.Evaluate(rpmNormalized); 
         float baseTorque = curveValue * g.maxTorque;
 
         float appliedTorque = baseTorque * currentShiftMultiplier;
@@ -139,9 +136,7 @@ public class ShipController : MonoBehaviour
         Vector3 forwardForce = transform.forward * appliedTorque * baseForceMultiplier * Time.fixedDeltaTime;
         rb.AddForce(forwardForce, ForceMode.Acceleration);
 
-        // cap speed (optional)
-        //float maxSpeed = 120f;
-        //if (rb.velocity.magnitude > maxSpeed) rb.velocity = rb.velocity.normalized * maxSpeed;
+      
     }
 
     // Called by UI Gas input
@@ -193,7 +188,7 @@ public class ShipController : MonoBehaviour
         Gear g = gears[currentGearIndex];
         float rpmNorm = Mathf.Clamp01(engineRPM / maxRPM);
         float val = g.torqueCurve.Evaluate(rpmNorm);
-        // normalize to reasonable 0..1 by dividing by a ceiling (we assume curves peak <= ~2)
+       
         return Mathf.Clamp01(val / 1.5f);
     }
 }

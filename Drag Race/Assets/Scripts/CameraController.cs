@@ -29,7 +29,7 @@ public class CameraController : MonoBehaviour
         {
             float intensity = ship.CurrentTorqueNormalized();
             cam.fieldOfView = Mathf.Lerp(relaxedFOV, stiffFOV, intensity);
-            // optionally increase follow speed slightly at high intensity
+          
             followSpeed = Mathf.Lerp(6f, 12f, intensity);
         }
     }
